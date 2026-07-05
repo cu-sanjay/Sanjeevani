@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Nutrition Guide{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>Nutrition guide</h1>
+    <p>Simple, everyday meal patterns for common health conditions.</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container">
+    <div class="condition-tabs">
+      {% for condition in conditions %}
+      <a href="{{ url_for('nutrition.plan', condition_id=condition.id) }}">{{ condition.label }}</a>
+      {% endfor %}
+    </div>
+    <div class="panel">
+      <p>Choose a condition above to see a simple meal pattern you can follow day to day. These are general suggestions built from common dietary guidance, not a personalised diet plan. Speak with a doctor or dietitian for advice specific to you.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Not Found{% endblock %}
+{% block content %}
+<div class="page-body">
+  <div class="container" style="max-width: 600px; text-align: center; padding-top: 60px;">
+    <h1>Page not found</h1>
+    <p style="color: var(--ink-soft);">The page you are looking for does not exist or may have moved.</p>
+    <a class="btn btn-primary" href="{{ url_for('main.home') }}">Back to home</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}Symptom Checker{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>Symptom checker</h1>
+    <p>Select the symptoms you are experiencing to see possible matches.</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container two-col">
+    <div class="panel">
+      <div class="field">
+        <label for="symptomSearch">Search symptoms</label>
+        <input type="search" id="symptomSearch" placeholder="Type to filter, for example fever or cough">
+      </div>
+      <div class="chip-list" id="chipList">
+        {% for symptom in symptoms %}
+        <button type="button" class="chip" data-symptom="{{ symptom }}">{{ symptom }}</button>
+        {% endfor %}
+      </div>
+      <label>Selected symptoms</label>
+      <div class="selected-row" id="selectedRow">
+        <span style="color: var(--ink-soft); font-size: 0.86rem;">No symptoms selected yet.</span>
+      </div>
+      <button class="btn btn-primary" id="checkBtn">Check possible conditions</button>
+    </div>
+
+    <div>
+      <div id="resultsPanel" class="panel" style="display:none;">
+        <h3 style="margin-bottom: 14px;">Possible conditions</h3>
+        <div id="resultsList"></div>
+      </div>
+      <div id="emptyState" class="panel empty-state">
+        <p>Pick a few symptoms on the left and select "Check possible conditions" to see results here.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
+  var selected = new Set();
+  var search = document.getElementById("symptomSearch");
+  var selectedRow = document.getElementById("selectedRow");
+  var checkBtn = document.getElementById("checkBtn");
+  var resultsPanel = document.getElementById("resultsPanel");
+  var resultsList = document.getElementById("resultsList");
+  var emptyState = document.getElementById("emptyState");
+
+  function renderSelected() {
+    if (selected.size === 0) {
+      selectedRow.innerHTML = '<span style="color: var(--ink-soft); font-size: 0.86rem;">No symptoms selected yet.</span>';
+      return;
+    }
+    selectedRow.innerHTML = "";
+    selected.forEach(function (symptom) {
+      var tag = document.createElement("span");
+      tag.className = "selected-tag";
+      tag.innerHTML = symptom + ' <button type="button" data-remove="' + symptom + '">&times;</button>';
+      selectedRow.appendChild(tag);
+    });
+  }
+
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      var symptom = chip.dataset.symptom;
+      if (selected.has(symptom)) {
+        selected.delete(symptom);
+        chip.classList.remove("selected");
+      } else {
+        selected.add(symptom);
+        chip.classList.add("selected");
+      }
+      renderSelected();
+    });
+  });
+
+  selectedRow.addEventListener("click", function (event) {
+    var target = event.target;
+    if (target.dataset && target.dataset.remove) {
+      var symptom = target.dataset.remove;
+      selected.delete(symptom);
+      chips.forEach(function (chip) {
+        if (chip.dataset.symptom === symptom) chip.classList.remove("selected");
+      });
+      renderSelected();
+    }
+  });
+
+  search.addEventListener("input", function () {
+    var query = search.value.trim().toLowerCase();
+    chips.forEach(function (chip) {
+      var match = chip.dataset.symptom.toLowerCase().indexOf(query) !== -1;
+      chip.style.display = match ? "" : "none";
+    });
+  });
+
+  checkBtn.addEventListener("click", function () {
+    if (selected.size === 0) {
+      alert("Please select at least one symptom.");
+      return;
+    }
+    checkBtn.disabled = true;
+    checkBtn.textContent = "Checking...";
+
+    fetch("{{ url_for('symptom.check') }}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ symptoms: Array.from(selected) }),
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        checkBtn.disabled = false;
+        checkBtn.textContent = "Check possible conditions";
+        renderResults(data.results || []);
+      })
+      .catch(function () {
+        checkBtn.disabled = false;
+        checkBtn.textContent = "Check possible conditions";
+        alert("Something went wrong while checking symptoms. Please try again.");
+      });
+  });
+
+  function renderResults(results) {
+    emptyState.style.display = "none";
+    resultsPanel.style.display = "block";
+
+    if (results.length === 0) {
+      resultsList.innerHTML = '<p style="color: var(--ink-soft);">No close matches were found for these symptoms. Try adding or removing a symptom.</p>';
+      return;
+    }
+
+    resultsList.innerHTML = results.map(function (r) {
+      var precautions = (r.precautions || []).map(function (p) { return "<li>" + p + "</li>"; }).join("");
+      var matched = (r.matched_symptoms || []).map(function (s) { return '<span class="pill">' + s + "</span>"; }).join("");
+      return (
+        '<div class="result-card">' +
+          '<div class="result-meta">' +
+            "<h4>" + r.disease + "</h4>" +
+            '<span class="confidence-value">' + r.confidence + "% match</span>" +
+          "</div>" +
+          '<div class="confidence-bar"><div class="confidence-fill" style="width:' + r.confidence + '%"></div></div>' +
+          "<p>" + r.description + "</p>" +
+          '<div class="tag-list">' + matched + "</div>" +
+          (precautions ? "<strong>Precautions</strong><ul class=\"precaution-list\">" + precautions + "</ul>" : "") +
+        "</div>"
+      );
+    }).join("");
+  }
+})();
+</script>
+{% endblock %}

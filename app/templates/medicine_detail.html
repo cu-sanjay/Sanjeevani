@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ medicine.name }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <a href="{{ url_for('medicine.index') }}" style="color: var(--sand-dark);">&larr; Back to medicine lookup</a>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container">
+    <div class="panel detail-header">
+      <div class="detail-image">
+        {% if medicine.image %}
+        <img src="{{ medicine.image }}" alt="{{ medicine.name }}" onerror="this.style.display='none'; this.parentNode.innerHTML='<span>No image available</span>';">
+        {% else %}
+        <span>No image available</span>
+        {% endif %}
+      </div>
+      <div>
+        <h1>{{ medicine.name }}</h1>
+        <p style="color: var(--ink-soft);">{{ medicine.composition }}</p>
+        <p style="font-size: 0.88rem;"><strong>Manufacturer:</strong> {{ medicine.manufacturer or "Not listed" }}</p>
+
+        <div class="detail-section">
+          <h3>Review summary</h3>
+          <div class="review-bar" style="height: 10px;">
+            <span class="excellent" style="width: {{ medicine.excellent_review }}%"></span>
+            <span class="average" style="width: {{ medicine.average_review }}%"></span>
+            <span class="poor" style="width: {{ medicine.poor_review }}%"></span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--ink-soft); margin-top: 6px;">
+            Excellent {{ medicine.excellent_review }}% &middot; Average {{ medicine.average_review }}% &middot; Poor {{ medicine.poor_review }}%
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top: 20px;">
+      <div class="detail-section" style="margin-top:0;">
+        <h3>Uses</h3>
+        <p>{{ medicine.uses or "Not listed for this medicine." }}</p>
+      </div>
+      <div class="detail-section">
+        <h3>Side effects</h3>
+        <p>{{ medicine.side_effects or "Not listed for this medicine." }}</p>
+      </div>
+      <div class="status-note">This information comes from a public dataset for reference only. Always read the package leaflet and consult a pharmacist or doctor before taking any medicine.</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}Medication Reminders{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>Medication reminders</h1>
+    <p>Keep track of what you take, and log doses as taken or skipped.</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container two-col">
+    <div>
+      <div class="panel" style="margin-bottom: 24px;">
+        <h3>Add a medicine</h3>
+        <form id="addMedForm">
+          <div class="field-row">
+            <div class="field">
+              <label for="medName">Medicine name</label>
+              <input type="text" id="medName" name="name" required placeholder="For example Metformin 500mg">
+            </div>
+            <div class="field">
+              <label for="medDosage">Dosage</label>
+              <input type="text" id="medDosage" name="dosage" placeholder="For example 1 tablet">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="medFrequency">Frequency</label>
+              <input type="text" id="medFrequency" name="frequency" placeholder="For example twice a day">
+            </div>
+            <div class="field">
+              <label for="medTime">Time of day</label>
+              <input type="text" id="medTime" name="time_of_day" placeholder="For example 8 AM and 8 PM">
+            </div>
+          </div>
+          <div class="field">
+            <label for="medNotes">Notes</label>
+            <input type="text" id="medNotes" name="notes" placeholder="Optional, for example take with food">
+          </div>
+          <button type="submit" class="btn btn-primary">Add medicine</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Your medicines</h3>
+        <div class="med-list" id="medList">
+          {% for med in medications %}
+          <div class="med-card" data-id="{{ med.id }}">
+            <div class="med-info">
+              <h3>{{ med.name }}</h3>
+              <p>{{ med.dosage or "" }}{{ " - " if med.dosage and med.frequency else "" }}{{ med.frequency or "" }}{{ " - " if med.time_of_day else "" }}{{ med.time_of_day or "" }}</p>
+              {% if med.notes %}<p>{{ med.notes }}</p>{% endif %}
+            </div>
+            <div class="med-actions">
+              <button class="btn btn-forest btn-small log-btn" data-id="{{ med.id }}" data-status="taken">Mark taken</button>
+              <button class="btn btn-ghost btn-small log-btn" data-id="{{ med.id }}" data-status="skipped">Mark skipped</button>
+              <button class="btn btn-danger btn-small delete-btn" data-id="{{ med.id }}">Remove</button>
+            </div>
+          </div>
+          {% else %}
+          <p style="color: var(--ink-soft);">No medicines added yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3>Recent history</h3>
+      <table class="log-table" id="logTable">
+        <thead>
+          <tr><th>Time</th><th>Status</th></tr>
+        </thead>
+        <tbody id="logTableBody">
+          {% for log in logs %}
+          <tr>
+            <td>{{ log.logged_at.strftime("%d %b, %H:%M") }}</td>
+            <td><span class="status-badge {{ log.status }}">{{ log.status }}</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="2" style="color: var(--ink-soft);">No history yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  var addForm = document.getElementById("addMedForm");
+  var medList = document.getElementById("medList");
+  var logTableBody = document.getElementById("logTableBody");
+
+  addForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var formData = new FormData(addForm);
+    fetch("{{ url_for('reminder.add') }}", { method: "POST", body: formData })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+        window.location.reload();
+      });
+  });
+
+  medList.addEventListener("click", function (event) {
+    var target = event.target;
+    if (target.classList.contains("log-btn")) {
+      var id = target.dataset.id;
+      var status = target.dataset.status;
+      fetch("/reminders/" + id + "/log", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: status }),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.log) {
+            var row = document.createElement("tr");
+            row.innerHTML = "<td>" + data.log.logged_at + "</td><td><span class=\"status-badge " + data.log.status + "\">" + data.log.status + "</span></td>";
+            logTableBody.insertBefore(row, logTableBody.firstChild);
+          }
+        });
+    }
+
+    if (target.classList.contains("delete-btn")) {
+      var medId = target.dataset.id;
+      if (!confirm("Remove this medicine and its history?")) return;
+      fetch("/reminders/" + medId + "/delete", { method: "POST" })
+        .then(function (res) { return res.json(); })
+        .then(function () { window.location.reload(); });
+    }
+  });
+})();
+</script>
+{% endblock %}

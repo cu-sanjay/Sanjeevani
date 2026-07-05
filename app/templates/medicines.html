@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Medicine Lookup{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>Medicine lookup</h1>
+    <p>Search by medicine name, composition or condition.</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container">
+    <form class="panel" style="margin-bottom: 26px;" method="get">
+      <div class="field">
+        <label for="q">Search medicines</label>
+        <input type="search" id="q" name="q" value="{{ query }}" placeholder="For example paracetamol, or cough">
+      </div>
+      <button class="btn btn-primary" type="submit">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
+        Search
+      </button>
+    </form>
+
+    {% if query %}
+      <p style="color: var(--ink-soft); margin-bottom: 16px;">Showing {{ medicines|length }} result{{ 's' if medicines|length != 1 else '' }} for "{{ query }}"</p>
+    {% endif %}
+
+    {% if medicines %}
+    <div class="medicine-grid">
+      {% for med in medicines %}
+      <a class="medicine-card" href="{{ url_for('medicine.detail', med_id=med.id) }}" style="text-decoration:none; color: inherit;">
+        <div class="thumb">
+          {% if med.image %}
+          <img src="{{ med.image }}" alt="{{ med.name }}" loading="lazy" onerror="this.style.display='none'; this.parentNode.innerHTML='<span class=\'thumb-fallback\'>No image available</span>';">
+          {% else %}
+          <span class="thumb-fallback">No image available</span>
+          {% endif %}
+        </div>
+        <div class="body">
+          <h3>{{ med.name }}</h3>
+          <p class="composition">{{ med.composition }}</p>
+          <p class="uses">{{ med.uses[:110] }}{{ '...' if med.uses|length > 110 else '' }}</p>
+          <div class="review-bar">
+            <span class="excellent" style="width: {{ med.excellent_review }}%"></span>
+            <span class="average" style="width: {{ med.average_review }}%"></span>
+            <span class="poor" style="width: {{ med.poor_review }}%"></span>
+          </div>
+          <span style="font-size: 0.8rem; color: var(--ink-soft);">{{ med.manufacturer }}</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="panel empty-state">
+      <p>No medicines matched that search. Try a different name or composition.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}Find Care{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>Find nearby care</h1>
+    <p>Locate hospitals, clinics, pharmacies and doctors close to you, using open map data.</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container">
+    <div class="panel" style="margin-bottom: 24px;">
+      <div class="location-controls">
+        <div class="field" style="flex: 1; min-width: 220px; margin-bottom: 0;">
+          <label for="placeInput">Search by city or area</label>
+          <input type="text" id="placeInput" placeholder="For example Koramangala, Bangalore">
+        </div>
+        <button class="btn btn-forest" id="searchPlaceBtn">Search this area</button>
+        <button class="btn btn-outline btn-small" id="useLocationBtn" style="color: var(--ink); border-color: var(--line);">Use my current location</button>
+      </div>
+
+      <label>Filter by type</label>
+      <div class="category-toggles" id="categoryToggles">
+        <button type="button" class="chip selected" data-cat="hospital">Hospitals</button>
+        <button type="button" class="chip selected" data-cat="clinic">Clinics</button>
+        <button type="button" class="chip selected" data-cat="pharmacy">Pharmacies</button>
+        <button type="button" class="chip selected" data-cat="doctor">Doctors</button>
+      </div>
+    </div>
+
+    <div id="statusArea"></div>
+    <div class="place-list" id="placeList"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  var placeInput = document.getElementById("placeInput");
+  var searchPlaceBtn = document.getElementById("searchPlaceBtn");
+  var useLocationBtn = document.getElementById("useLocationBtn");
+  var categoryToggles = document.getElementById("categoryToggles");
+  var statusArea = document.getElementById("statusArea");
+  var placeList = document.getElementById("placeList");
+  var chips = Array.prototype.slice.call(categoryToggles.querySelectorAll(".chip"));
+
+  chips.forEach(function (chip) {
+    chip.addEventListener("click", function () {
+      chip.classList.toggle("selected");
+    });
+  });
+
+  function activeCategories() {
+    return chips.filter(function (c) { return c.classList.contains("selected"); })
+      .map(function (c) { return c.dataset.cat; });
+  }
+
+  function setStatus(message, ok) {
+    statusArea.innerHTML = '<div class="status-note' + (ok ? " ok" : "") + '">' + message + "</div>";
+  }
+
+  function runSearch(payload) {
+    placeList.innerHTML = "";
+    setStatus("Searching for care nearby, this can take a few seconds...", true);
+    fetch("{{ url_for('resource.search') }}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+      .then(function (wrapped) {
+        if (!wrapped.ok) {
+          setStatus(wrapped.data.error || "Something went wrong.", false);
+          return;
+        }
+        var results = wrapped.data.results || [];
+        if (results.length === 0) {
+          setStatus("No matching places were found nearby. Try widening your filters or searching a different area.", false);
+          return;
+        }
+        setStatus("Found " + results.length + " place" + (results.length === 1 ? "" : "s") + " nearby.", true);
+        placeList.innerHTML = results.map(renderPlace).join("");
+      })
+      .catch(function () {
+        setStatus("The search failed. Please try again in a moment.", false);
+      });
+  }
+
+  function renderPlace(place) {
+    return (
+      '<div class="place-card">' +
+        "<div>" +
+          '<span class="category-pill">' + place.category + "</span>" +
+          "<h3>" + place.name + "</h3>" +
+          '<p class="place-meta">' + place.address + (place.phone ? " &middot; " + place.phone : "") + "</p>" +
+        "</div>" +
+        '<a class="btn btn-ghost btn-small" href="' + place.maps_url + '" target="_blank" rel="noopener">View on map</a>' +
+      "</div>"
+    );
+  }
+
+  searchPlaceBtn.addEventListener("click", function () {
+    var name = placeInput.value.trim();
+    if (!name) {
+      setStatus("Please type a city or area to search.", false);
+      return;
+    }
+    runSearch({ place_name: name, categories: activeCategories() });
+  });
+
+  placeInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      searchPlaceBtn.click();
+    }
+  });
+
+  useLocationBtn.addEventListener("click", function () {
+    if (!navigator.geolocation) {
+      setStatus("Your browser does not support location access. Please search by city instead.", false);
+      return;
+    }
+    setStatus("Requesting your location...", true);
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        runSearch({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          categories: activeCategories(),
+        });
+      },
+      function () {
+        setStatus("Location access was denied. Please search by city or area instead.", false);
+      }
+    );
+  });
+})();
+</script>
+{% endblock %}

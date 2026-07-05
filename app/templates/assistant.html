@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Health Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>Health assistant</h1>
+    <p>Ask a general health question and get a quick, plain language answer.</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container" style="max-width: 760px;">
+    <div class="panel">
+      <div class="chat-window" id="chatWindow">
+        {% for msg in history %}
+        <div class="chat-msg {{ msg.role }}">{{ msg.content }}</div>
+        {% else %}
+        <p style="color: var(--ink-soft);">Ask something like "what helps with a mild headache" or "how much water should I drink daily".</p>
+        {% endfor %}
+      </div>
+      <form class="chat-form" id="chatForm">
+        <input type="text" id="chatInput" placeholder="Type your health question" required autocomplete="off">
+        <button type="submit" class="btn btn-primary">Send</button>
+      </form>
+      <p class="chat-disclaimer">This assistant gives general information only. It is not a diagnosis. For anything urgent or serious, contact a licensed doctor or emergency services.</p>
+      <button class="btn btn-ghost btn-small" id="clearChatBtn" style="margin-top: 10px;">Clear conversation</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  var chatForm = document.getElementById("chatForm");
+  var chatInput = document.getElementById("chatInput");
+  var chatWindow = document.getElementById("chatWindow");
+  var clearBtn = document.getElementById("clearChatBtn");
+
+  function addMessage(role, content) {
+    var div = document.createElement("div");
+    div.className = "chat-msg " + role;
+    div.textContent = content;
+    chatWindow.appendChild(div);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+
+  chatForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var message = chatInput.value.trim();
+    if (!message) return;
+    addMessage("user", message);
+    chatInput.value = "";
+
+    fetch("{{ url_for('assistant.ask') }}", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message }),
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        addMessage("assistant", data.reply || "Something went wrong. Please try again.");
+      })
+      .catch(function () {
+        addMessage("assistant", "The assistant could not be reached. Please try again in a moment.");
+      });
+  });
+
+  clearBtn.addEventListener("click", function () {
+    fetch("{{ url_for('assistant.clear') }}", { method: "POST" }).then(function () {
+      window.location.reload();
+    });
+  });
+})();
+</script>
+{% endblock %}

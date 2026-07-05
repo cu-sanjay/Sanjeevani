@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Sanjeevani{% endblock %} | Be Your Own Doctor</title>
+  <meta name="description" content="Sanjeevani is a self-care health companion for symptom checking, medicine lookup, nutrition guidance, medication reminders and finding nearby care.">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/leaf-mark.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="{{ url_for('main.home') }}">
+        <img src="{{ url_for('static', filename='img/leaf-mark.svg') }}" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Sanjeevani</span>
+          <span class="brand-tag">Be Your Own Doctor</span>
+        </span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="siteNav">
+        <a href="{{ url_for('symptom.index') }}">Symptom Checker</a>
+        <a href="{{ url_for('medicine.index') }}">Medicine Lookup</a>
+        <a href="{{ url_for('resource.index') }}">Find Care</a>
+        <a href="{{ url_for('nutrition.index') }}">Nutrition</a>
+        <a href="{{ url_for('reminder.index') }}">Reminders</a>
+        <a href="{{ url_for('assistant.index') }}">Assistant</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>
+        <p class="footer-brand">Sanjeevani</p>
+        <p class="footer-note">A self-care companion. Not a replacement for professional medical advice.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/cu-sanjay" target="_blank" rel="noopener">Built by Sanjay on GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

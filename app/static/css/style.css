@@ -1,0 +1,593 @@
+/* Sanjeevani - Be Your Own Doctor
+   Flat colour theme. No gradients. No blue/violet tones. */
+
+:root {
+  --forest: #22402F;
+  --forest-dark: #17301F;
+  --forest-soft: #E4ECE4;
+  --clay: #B5502A;
+  --clay-dark: #953F1F;
+  --sand: #F6F1E6;
+  --sand-dark: #EDE4D0;
+  --paper: #FBF8F1;
+  --ink: #262420;
+  --ink-soft: #55524B;
+  --line: #DCD4C0;
+  --gold: #C79A3A;
+  --ok: #3E7A4A;
+  --warn: #B5502A;
+
+  --radius: 10px;
+  --shadow: 0 2px 10px rgba(38, 36, 32, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Georgia", "Iowan Old Style", "Palatino Linotype", serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  color: var(--forest-dark);
+  margin: 0 0 0.5rem;
+  line-height: 1.25;
+}
+
+p { margin: 0 0 1rem; }
+
+a { color: var(--clay-dark); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Header */
+.site-header {
+  background: var(--forest);
+  border-bottom: 4px solid var(--clay);
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--sand);
+}
+.brand:hover { text-decoration: none; }
+
+.brand-mark { width: 40px; height: 40px; flex-shrink: 0; }
+
+.brand-text { display: flex; flex-direction: column; }
+.brand-name {
+  font-family: "Trebuchet MS", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--sand);
+  letter-spacing: 0.02em;
+}
+.brand-tag {
+  font-size: 0.72rem;
+  color: var(--sand-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.site-nav {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.site-nav a {
+  color: var(--sand);
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 6px 2px;
+  border-bottom: 2px solid transparent;
+}
+.site-nav a:hover {
+  text-decoration: none;
+  border-bottom-color: var(--clay);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--sand);
+}
+
+/* Footer */
+.site-footer {
+  background: var(--forest-dark);
+  color: var(--sand-dark);
+  margin-top: 60px;
+}
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 26px 24px;
+}
+.footer-brand {
+  font-family: "Trebuchet MS", sans-serif;
+  font-weight: 700;
+  color: var(--sand);
+  margin: 0;
+}
+.footer-note { margin: 4px 0 0; font-size: 0.85rem; }
+.footer-links a { color: var(--gold); font-weight: 600; }
+
+/* Hero */
+.hero {
+  background: var(--forest);
+  color: var(--sand);
+  padding: 64px 0 76px;
+  position: relative;
+}
+.hero-inner {
+  max-width: 720px;
+}
+.hero-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  color: var(--gold);
+  font-family: "Trebuchet MS", sans-serif;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: block;
+}
+.hero h1 {
+  color: var(--sand);
+  font-size: 2.5rem;
+  margin-bottom: 14px;
+}
+.hero p.lede {
+  color: var(--sand-dark);
+  font-size: 1.08rem;
+  max-width: 560px;
+}
+.hero-actions {
+  margin-top: 26px;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Trebuchet MS", sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 11px 20px;
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.15s ease;
+}
+.btn:hover { text-decoration: none; }
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--clay);
+  color: var(--sand);
+}
+.btn-primary:hover { background: var(--clay-dark); }
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--sand-dark);
+  color: var(--sand);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+.btn-forest {
+  background: var(--forest);
+  color: var(--sand);
+}
+.btn-forest:hover { background: var(--forest-dark); }
+
+.btn-small { padding: 7px 14px; font-size: 0.82rem; }
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-ghost:hover { border-color: var(--clay); color: var(--clay-dark); }
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--clay-dark);
+}
+.btn-danger:hover { background: var(--clay); color: var(--sand); border-color: var(--clay); }
+
+/* Sections */
+section { padding: 56px 0; }
+.section-head {
+  max-width: 640px;
+  margin-bottom: 32px;
+}
+.section-head .kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  color: var(--clay-dark);
+  font-family: "Trebuchet MS", sans-serif;
+  font-weight: 700;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.feature-card {
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: var(--shadow);
+}
+.feature-card .icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--forest-soft);
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.feature-card h3 { font-size: 1.08rem; }
+.feature-card p { color: var(--ink-soft); font-size: 0.94rem; margin-bottom: 12px; }
+
+/* Cards / panels used across pages */
+.panel {
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px;
+  box-shadow: var(--shadow);
+}
+.page-header {
+  background: var(--forest);
+  color: var(--sand);
+  padding: 40px 0;
+}
+.page-header h1 { color: var(--sand); margin-bottom: 6px; }
+.page-header p { color: var(--sand-dark); margin: 0; }
+
+.page-body { padding: 40px 0 72px; }
+
+/* Forms */
+label {
+  display: block;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--forest-dark);
+  margin-bottom: 6px;
+}
+input[type="text"], input[type="search"], input[type="number"], select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--forest);
+}
+.field { margin-bottom: 16px; }
+.field-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+/* Symptom checker chips */
+.symptom-search { position: relative; margin-bottom: 16px; }
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+.chip {
+  border: 1.5px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: "Trebuchet MS", sans-serif;
+}
+.chip.selected {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: var(--sand);
+}
+.selected-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; min-height: 20px; }
+.selected-tag {
+  background: var(--clay);
+  color: var(--sand);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.selected-tag button {
+  background: none;
+  border: none;
+  color: var(--sand);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.result-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  background: var(--paper);
+}
+.result-card .confidence-bar {
+  height: 8px;
+  border-radius: 6px;
+  background: var(--sand-dark);
+  overflow: hidden;
+  margin: 8px 0 14px;
+}
+.result-card .confidence-fill {
+  height: 100%;
+  background: var(--forest);
+}
+.result-meta { display: flex; align-items: baseline; gap: 10px; justify-content: space-between; }
+.result-meta .confidence-value { font-family: "Trebuchet MS", sans-serif; font-weight: 700; color: var(--clay-dark); }
+.tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.tag-list .pill {
+  background: var(--forest-soft);
+  color: var(--forest-dark);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+}
+.precaution-list { margin: 10px 0 0; padding-left: 18px; }
+.precaution-list li { margin-bottom: 4px; color: var(--ink-soft); }
+
+/* Medicine cards */
+.medicine-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.medicine-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--sand);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.medicine-card .thumb {
+  height: 150px;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+}
+.medicine-card .thumb img { max-height: 130px; max-width: 100%; object-fit: contain; }
+.medicine-card .thumb-fallback { color: var(--ink-soft); }
+.medicine-card .body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+.medicine-card h3 { font-size: 1rem; margin-bottom: 4px; }
+.medicine-card .composition { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 10px; }
+.medicine-card .uses { font-size: 0.86rem; margin-bottom: 12px; flex: 1; }
+.review-bar { display: flex; height: 6px; border-radius: 4px; overflow: hidden; margin-bottom: 10px; }
+.review-bar span.excellent { background: var(--ok); }
+.review-bar span.average { background: var(--gold); }
+.review-bar span.poor { background: var(--clay); }
+
+.detail-header { display: grid; grid-template-columns: 220px 1fr; gap: 30px; }
+.detail-image {
+  background: var(--sand);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  height: 220px;
+}
+.detail-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.detail-section { margin-top: 22px; }
+.detail-section h3 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--clay-dark); font-family: "Trebuchet MS", sans-serif; }
+
+/* Find care */
+.location-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 20px; }
+.category-toggles { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.category-toggles .chip { display: flex; align-items: center; gap: 6px; }
+.place-list { display: flex; flex-direction: column; gap: 12px; }
+.place-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: var(--paper);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.place-card .category-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--forest-soft);
+  color: var(--forest-dark);
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-bottom: 6px;
+}
+.place-card h3 { font-size: 1rem; margin-bottom: 2px; }
+.place-card .place-meta { font-size: 0.85rem; color: var(--ink-soft); }
+
+.status-note {
+  border-left: 4px solid var(--clay);
+  background: var(--sand);
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+}
+.status-note.ok { border-left-color: var(--ok); }
+
+/* Nutrition */
+.condition-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 26px; }
+.condition-tabs a {
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.condition-tabs a.active { background: var(--forest); border-color: var(--forest); color: var(--sand); }
+.meal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 20px; }
+.meal-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; background: var(--paper); }
+.meal-card h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--clay-dark); font-family: "Trebuchet MS", sans-serif; margin-bottom: 8px; }
+.avoid-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.avoid-list li { list-style: none; background: var(--sand); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 0.82rem; }
+
+/* Reminders */
+.med-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.med-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: var(--paper);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.med-card .med-info h3 { font-size: 1rem; margin-bottom: 2px; }
+.med-card .med-info p { margin: 0; font-size: 0.85rem; color: var(--ink-soft); }
+.med-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.log-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.log-table th, .log-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); font-size: 0.86rem; }
+.log-table th { font-family: "Trebuchet MS", sans-serif; color: var(--ink-soft); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; }
+.status-badge { border-radius: 999px; padding: 3px 10px; font-size: 0.76rem; font-family: "Trebuchet MS", sans-serif; }
+.status-badge.taken { background: var(--forest-soft); color: var(--forest-dark); }
+.status-badge.skipped { background: #F0DCC8; color: var(--clay-dark); }
+
+/* Assistant / chat */
+.chat-window {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  height: 460px;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-msg { max-width: 75%; padding: 10px 14px; border-radius: 10px; font-size: 0.92rem; }
+.chat-msg.user { align-self: flex-end; background: var(--forest); color: var(--sand); }
+.chat-msg.assistant { align-self: flex-start; background: var(--sand); border: 1px solid var(--line); }
+.chat-form { display: flex; gap: 10px; margin-top: 16px; }
+.chat-form input { flex: 1; }
+.chat-disclaimer { font-size: 0.8rem; color: var(--ink-soft); margin-top: 10px; }
+
+/* Two column layout */
+.two-col { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: start; }
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-soft);
+}
+
+.badge-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+
+@media (max-width: 900px) {
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .medicine-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: 1fr; }
+  .detail-header { grid-template-columns: 1fr; }
+  .meal-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 720px) {
+  .nav-toggle { display: flex; }
+  .site-nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding-top: 12px;
+  }
+  .site-nav.open { display: flex; }
+  .header-row { flex-wrap: wrap; }
+  .hero h1 { font-size: 1.9rem; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .medicine-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+}

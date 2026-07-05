@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ plan.label }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>{{ plan.label }}</h1>
+    <p>{{ plan.summary }}</p>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container">
+    <div class="condition-tabs">
+      {% for condition in conditions %}
+      <a href="{{ url_for('nutrition.plan', condition_id=condition.id) }}" class="{{ 'active' if condition.id == active_id else '' }}">{{ condition.label }}</a>
+      {% endfor %}
+    </div>
+
+    {% for day in plan.days %}
+    <div class="panel" style="margin-bottom: 20px;">
+      <h3>{{ day.day }}</h3>
+      <div class="meal-grid">
+        <div class="meal-card">
+          <h4>Breakfast</h4>
+          <p style="margin:0;">{{ day.breakfast }}</p>
+        </div>
+        <div class="meal-card">
+          <h4>Lunch</h4>
+          <p style="margin:0;">{{ day.lunch }}</p>
+        </div>
+        <div class="meal-card">
+          <h4>Snack</h4>
+          <p style="margin:0;">{{ day.snack }}</p>
+        </div>
+        <div class="meal-card">
+          <h4>Dinner</h4>
+          <p style="margin:0;">{{ day.dinner }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="panel">
+      <h3>Foods to limit</h3>
+      <ul class="avoid-list">
+        {% for item in plan.avoid %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

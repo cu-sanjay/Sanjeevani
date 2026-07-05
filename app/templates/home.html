@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <span class="hero-kicker">Be Your Own Doctor</span>
+    <h1>Understand your health before you need to worry about it.</h1>
+    <p class="lede">Sanjeevani brings together a symptom checker, a medicine reference, a nutrition guide, medication reminders and a health assistant, so you can make sense of how you feel and what to do next.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('symptom.index') }}">Check my symptoms</a>
+      <a class="btn btn-outline" href="{{ url_for('medicine.index') }}">Look up a medicine</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="kicker">What you can do here</span>
+      <h2>Five tools, one place to start</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12h4l2-6 4 12 3-7h7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Symptom checker</h3>
+        <p>Select what you are feeling and see possible conditions, ranked by how closely they match, along with precautions.</p>
+        <a href="{{ url_for('symptom.index') }}">Open symptom checker &rarr;</a>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="10" width="18" height="8" rx="4" transform="rotate(-30 12 14)"/><line x1="12" y1="7" x2="12" y2="21" transform="rotate(-30 12 14)"/></svg></div>
+        <h3>Medicine lookup</h3>
+        <p>Search a catalogue of medicines by name or composition to see uses, side effects, manufacturer and user reviews.</p>
+        <a href="{{ url_for('medicine.index') }}">Open medicine lookup &rarr;</a>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-7.2 7-12a7 7 0 10-14 0c0 4.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg></div>
+        <h3>Find nearby care</h3>
+        <p>Locate hospitals, clinics, pharmacies and doctors near any place, sourced from open map data.</p>
+        <a href="{{ url_for('resource.index') }}">Open find care &rarr;</a>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 19c0-8 5-14 14-14 1 8-4 13-14 14z"/><path d="M6 18c3-4 6-7 10-11"/></svg></div>
+        <h3>Nutrition guide</h3>
+        <p>Simple, everyday meal patterns for common conditions such as diabetes, hypertension and heart health.</p>
+        <a href="{{ url_for('nutrition.index') }}">Open nutrition guide &rarr;</a>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 16v-5a6 6 0 1112 0v5l1.5 2.5h-15L6 16z"/><path d="M10 20a2 2 0 004 0"/></svg></div>
+        <h3>Medication reminders</h3>
+        <p>Keep a simple list of your medicines, mark doses as taken or skipped, and review your history over time.</p>
+        <a href="{{ url_for('reminder.index') }}">Open reminders &rarr;</a>
+      </div>
+      <div class="feature-card">
+        <div class="icon-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v11H9l-4 4v-4H4z"/></svg></div>
+        <h3>Health assistant</h3>
+        <p>Ask general health questions in plain language and get a quick, practical answer to guide your next step.</p>
+        <a href="{{ url_for('assistant.index') }}">Open health assistant &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--sand); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="container" style="max-width: 760px; text-align: center;">
+    <h2>Sanjeevani is a self care companion, not a doctor</h2>
+    <p style="color: var(--ink-soft);">Named after the life restoring herb from Indian legend, Sanjeevani is built to help you understand your body better and act early. It does not replace a licensed physician. For anything urgent or serious, please seek professional medical care.</p>
+  </div>
+</section>
+{% endblock %}
